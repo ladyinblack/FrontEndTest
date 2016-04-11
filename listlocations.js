@@ -29,11 +29,10 @@ navigator.geolocation.getCurrentPosition(function (data) {
 			content.innerHTML = "";
 			for (var i = 0; i < venues.length; i++) {
 				content.innerHTML += "<a href=\"#\"" + " id=\"locationLinks\"" + " data-locationId=\"" + venues[i].id + "\"" + ">" + venues[i].name + "</a><hr />";
-//				(function () {
-					var vid = document.getElementById("locationLinks");
-					vid.addEventListener("click", getPhotos);
-//				}());
-				
+			}
+			vid = document.getElementsByClassName("locationLinks");
+			for (var i = 0; i < vid.length; i++) {
+				vid[i].addEventListener('click', getPhotos, false);
 			}
 		}
 	}
@@ -42,8 +41,8 @@ navigator.geolocation.getCurrentPosition(function (data) {
 	//content.innerHTML = "Latitude: " + lat + "<br />Longitude: " + lng;
 });
 
-function getPhotos(e) {
-	var venueId = document.getElementById("locationLinks").getAttribute("data-locationId");
+var getPhotos = function (e) {
+	var venueId = this.getAttribute("data-locationId");
 //	view.innerHTML = venueId;
 	var endpoint = 'venues/' + venueId + '/photos?';
 	var apiUrl = config.API_URL + endpoint + 'client_id=' + config.CLIENT_ID + '&client_secret=' + config.CLIENT_SECRET + '&v=' + config.REQUEST_DATE;
