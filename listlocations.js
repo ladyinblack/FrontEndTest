@@ -76,11 +76,11 @@ var getPhotos = function(e) {
 			view.innerHTML = "";
 			
 			for (var i = 0; i < photos.length; i++) {
-				view.innerHTML += "<a href=\"#\"" + " class=\"photoLinks\"" + " data-photoId=\"" + photos[i].id + "\"" + ">" + photos[i].suffix + "</a><hr />";
+				view.innerHTML += "Photo " + [i+1] + ": <a href=\"#\"" + " class=\"photoLinks\"" + " data-photoId=\"" + photos[i].id + "\"" + ">" + photos[i].suffix + "</a><hr />";
 				//+ photos[i].prefix + photos[i].width + "x" + photos[i].height + photos[i].suffix + "\"/>"
 			}
 			if (data["response"]["photos"]["count"] == 0) {
-				view.innerHTML = "No pictures for this venue";
+				view.innerHTML = "<p>No pictures for this venue</p>";
 			}
 			
 			pid = document.getElementsByClassName("photoLinks");
@@ -123,6 +123,7 @@ var getPhotoDetails = function(e) {
 			var photoName = photodetails["venue"]["name"];
 			headerpage.innerHTML = "Details for " + photoName;
 			var imgEl = "<img id=\"photo\" class=\"img-responsive\" alt=\"Image by " + photodetails["user"]["firstName"] + " " + photodetails["user"]["lastName"] + "\" src=\"" + photodetails["prefix"] + photodetails["width"] + "x" + photodetails["height"] + photodetails["suffix"] + "\" />";
+			photoImg = document.getElementById("photo");
 			var address = photodetails["venue"]["location"]["address"];
 			var crossStreet = photodetails["venue"]["location"]["crossStreet"];
 			var postalCode = photodetails["venue"]["location"]["postalCode"];
@@ -130,6 +131,9 @@ var getPhotoDetails = function(e) {
 			var country = photodetails["venue"]["location"]["country"];
 			var whereStart = "<p><strong>Address</strong>: ";
 			var whereEnd = "</p>";
+			var category = photodetails["venue"]["categories"]["name"];
+			var categoryStart = "<p><strong>Category</strong>: ";
+			var categoryEnd = "</p>";
 			if (address == undefined) {
 				address = "";
 				whereStart += address;
@@ -165,11 +169,18 @@ var getPhotoDetails = function(e) {
 			else {
 				whereStart += country + ", ";
 			}
+			if (category == undefined) {
+				category = "";
+				categoryStart = "";
+			}
+			else {
+				categoryStart += category;
+			}
+			categoryText = categoryStart + categoryEnd;
 			where = whereStart + whereEnd;
 			
 			details.innerHTML = "";
-			details.innerHTML = imgEl + where;
-			
+			details.innerHTML = imgEl + where + categoryText;
 		}
 	}
 	request.send(null);
